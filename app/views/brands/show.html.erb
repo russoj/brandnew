@@ -1,0 +1,43 @@
+<p>
+  <b>Name:</b>
+  <%=h @brand.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @brand.description %>
+</p>
+
+<p>
+  <b>Filename:</b>
+  <%=h @brand.filename %>
+</p>
+
+<p>
+  <b>Thumbnail:</b>
+  <%=h @brand.thumbnail %>
+</p>
+
+<p>
+  <b>Content type:</b>
+  <%=h @brand.content_type %>
+</p>
+
+<p>
+  <b>Size:</b>
+  <%=h @brand.size %>
+</p>
+
+<p>
+  <b>Width:</b>
+  <%=h @brand.width %>
+</p>
+
+<p>
+  <b>Height:</b>
+  <%=h @brand.height %>
+</p>
+
+
+<%= link_to 'Edit', edit_brand_path(@brand) %> |
+<%= link_to 'Back', brands_path %>

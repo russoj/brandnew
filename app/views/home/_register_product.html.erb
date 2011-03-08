@@ -1,0 +1,10 @@
+  <h2> Register product </h2>
+  <% form_tag purchases_path, :method => :post, :id => "registerPrd" do %>
+  <fieldset title="Register Product">
+    <%= text_field_tag :product_id, h(params[:product_id]), :id => "TxtRegister", :class => "txt",
+                                          :maxlength => 50 %>
+    <%= submit_tag "Register", :name => nil, :id => "btnRegister",
+                             :class => "button"  %>
+    <%= hidden_field_tag "person_id", person.id %>
+  </fieldset>
+  <% end %>

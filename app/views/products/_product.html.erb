@@ -1,0 +1,13 @@
+<li class="vcard person">
+  
+  <% unless product.nil? %>
+    <div class="profile-image">
+    
+	<%=image_link(product, 
+	  	:image_options => { :class => "product fn" },
+	    :link_options =>  { :class => "url" })%>
+  </div>
+  <%= link_to product.name,product_path(product) %>
+  <% end %>
+  
+</li>

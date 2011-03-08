@@ -1,0 +1,20 @@
+<h2> Your Products</h2>
+<%- if @products.nil? -%>
+</br>You don't own any products
+<% else %>
+  
+  <ul class="grid contacts small">
+    <%- @products.each do |product| -%>
+		<li class="vcard">
+	  	<!--<%=h product.name %>-->
+		<%= image_link(product, 
+	  	:image_options => { :class => "product fn" },
+	    :link_options =>  { :class => "url" },
+	      :vcard => true)
+	  	%>
+		</li>
+    
+    <%- end -%>
+	   
+  </ul>
+<%- end -%>
