@@ -95,7 +95,7 @@ module AuthenticatedSystem
 
     # Called from #current_person.  First attempt to login by the person id stored in the session.
     def login_from_session
-      self.current_person = Person.find(session[:person_id]) if session[:person_id]
+        self.current_person = Person.find(session[:person_id]) if session[:person_id]
     end
 
     # Called from #current_person.  Now, attempt to login by basic authentication information.

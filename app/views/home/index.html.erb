@@ -6,16 +6,26 @@
                   messages_path %>
     </div>
   <%- end -%>
+  <%= render :partial => 'shared/products_preview', 
+			   :locals => { :person => current_person } %>
   <%= render :partial => 'feed' %>
 <%- end -%>
 
 <%- column_div :type => :secondary do -%>
   <%= render :partial => "searches/box" %>
+  
+  
   <%- if logged_in? -%>
+      <%= render :partial => 'register_product', 
+ 				 :locals => { :person => current_person } %>
+
+    <!--
     <%= render :partial => 'requested_contacts' %>
     <%= render :partial => 'messages_preview' %>
     <%= render :partial => 'shared/contacts_preview',
-               :locals => { :person => current_person } %>
+               :locals => { :person => current_person } %>-->
+			   Your Credit: <br/>
+			   <%= h(current_person.credit)%>
   <%- else -%>
     <%- unless global_prefs.app_name.blank? -%>
       <h2>About <%= global_prefs.app_name %></h2>
@@ -36,3 +46,5 @@
       
   <%- end -%>
 <%- end -%>
+
+

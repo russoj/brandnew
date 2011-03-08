@@ -53,8 +53,9 @@ class Person < ActiveRecord::Base
   NUM_RECENT_MESSAGES = 4
   NUM_WALL_COMMENTS = 10
   NUM_RECENT = 8
-  FEED_SIZE = 10
+  FEED_SIZE = 3
   MAX_DEFAULT_CONTACTS = 12
+  MAX_PRODUCTS = 5
   TIME_AGO_FOR_MOSTLY_ACTIVE = 1.month.ago
   # These constants should be methods, but I couldn't figure out how to use
   # methods in the has_many associations.  I hope you can do better.
@@ -79,6 +80,10 @@ class Person < ActiveRecord::Base
   has_many :requested_contacts, :through => :connections,
            :source => :contact,
            :conditions => REQUESTED_AND_ACTIVE
+  
+  has_many :purchases
+  has_many :products, :order => 'created_at', :through => :purchases
+  
   with_options :class_name => "Message", :dependent => :destroy,
                :order => 'created_at DESC' do |person|
     person.has_many :_sent_messages, :foreign_key => "sender_id",
@@ -191,6 +196,10 @@ class Person < ActiveRecord::Base
   # Return some contacts for the home page.
   def some_contacts
     contacts[(0...MAX_DEFAULT_CONTACTS)]
+  end
+  
+  def my_products
+    products[(0..MAX_PRODUCTS)]
   end
 
   # Contact links for the contact image raster.

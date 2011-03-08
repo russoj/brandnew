@@ -1,4 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :brands
+
+  map.resources :purchases
+
+  map.resources :products
+
   map.resources :categories
   map.resources :links
   map.resources :events, :member => { :attend => :get, 
@@ -29,6 +35,8 @@ ActionController::Routing::Routes.draw do |map|
      person.resources :messages
      person.resources :galleries
      person.resources :connections
+     person.resources :purchases
+     person.resources :products
      person.resources :comments
   end
   

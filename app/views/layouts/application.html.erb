@@ -37,8 +37,10 @@
         <% end %>     
         <%= yield %>
       </div>
+	  
       <%= render :partial => 'shared/footer' %>
-      <%= render :partial => 'shared/debug' if development? %>
+      <!--<%= render :partial => 'shared/debug' if development? %>-->
+	  
     </div>
     <%= global_prefs.analytics %>
   </body>

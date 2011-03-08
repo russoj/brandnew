@@ -18,6 +18,8 @@ namespace :db do
       make_forum_posts
       make_blog_posts
       make_feed
+      make_products
+      make_purchases
       puts "Completed loading sample data."
       puts "Run 'rake ultrasphinx:bootstrap' to start Sphinx search"
     end
@@ -37,6 +39,14 @@ namespace :db do
       # an error when creating the admin user.
       system("rake db:sample_data:load")
     end
+    
+    desc "Test specific task"
+    task :test_task => :environment do |t|
+      
+      #make_purchases
+      puts "Done"
+    end
+    
   end
 end
 
@@ -54,7 +64,8 @@ def create_people
                               :password => password, 
                               :password_confirmation => password,
                               :name => full_name,
-                              :description => @lipsum)
+                              :description => @lipsum,
+                              :credit => Integer(rand(100)))
       person.last_logged_in_at = Time.now
       person.save
       gallery = Gallery.unsafe_create(:person => person, :title => 'Primary',
@@ -76,6 +87,22 @@ def make_connections
     sometimes(0.5) { Connection.accept(person, contact) }
   end
 end
+
+
+def make_purchases
+  products = Product.find(:all)
+  products.shuffle[0..5].each do |product|
+      sometimes(0.5) { Purchase.create!(:person_id => default_person.id, :product_id => product.id) }
+  end
+  people = Person.find(:all) - [default_person] 
+  
+  people.shuffle[0..20].each do |person|
+    products.shuffle[0..5].each do |product|
+      sometimes(0.25) { Purchase.create!(:person_id => person.id, :product_id => product.id) }
+    end
+  end
+end
+
 
 def make_messages(text)
   michael = default_person
@@ -131,6 +158,35 @@ def make_preferences
   Preference.create!(:app_name => 'Insoshi', :domain => 'example.com', :smtp_server => 'mail.example.com', :email_notifications => false)
 end
 
+def make_products
+  
+    filename = File.join(DATA_DIRECTORY, "products.txt")
+    products = File.open(filename).readlines
+    
+    #photos = Dir.glob("lib/tasks/sample_data/product_photos/*.jpg").shuffle
+    product_photos = Dir.glob("lib/tasks/sample_data/photos/product_photos/*.jpg")
+    brand_photos = Dir.glob("lib/tasks/sample_data/photos/brand_photos/*.jpg")
+    products.each_with_index do |product, i|
+      product.strip!
+      product_name, product_description = product.split("-")
+      brand_name, product_name = product_name.split(",")
+      
+      brand_photo = uploaded_file(photos)
+      brand = Brand.unsafe_create!(:name => brand_name, 
+                           :uploaded_data => brand_photo)
+                           
+      product_name.strip!
+      product_photo = uploaded_file(photos[i], 'image/jpg')
+      Product.unsafe_create!(:name => product_name,
+                              :description => product_description, 
+                              :uploaded_data => product_photo,
+                              :credit => Integer(rand(100)), 
+                              :brand_id => brand.id)
+      
+    end
+       
+end
+
 def uploaded_file(filename, content_type)
   t = Tempfile.new(filename.split('/').last)
   t.binmode
@@ -145,7 +201,8 @@ def uploaded_file(filename, content_type)
 end
 
 def default_person
-  Person.find_by_email('michael@example.com')  
+  #Person.find_by_email('michael@example.com')
+  Person.find_by_email('james@example.com')  
 end
 
 # Return some random text.

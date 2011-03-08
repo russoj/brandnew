@@ -1,3 +1,4 @@
+require "set"
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   
@@ -11,8 +12,13 @@ module ApplicationHelper
   ## Menu helpers
   
   def menu
-    home     = menu_element("Dashboard",   home_path)
+    
     people   = menu_element("People", people_path)
+    purchases   = menu_element("My", purchases_path)
+    brands   = menu_element("More", purchases_path)
+    recommend   = menu_element("Recommend", products_path)
+    buy   = menu_element("Buy", products_path)
+    
     if Forum.count == 1
       forum = menu_element("Forum", forum_path(Forum.find(:first)))
     else
@@ -22,14 +28,16 @@ module ApplicationHelper
 
     if logged_in? and not admin_view?
       profile  = menu_element("Profile",  person_path(current_person))
-      messages = menu_element("Messages", messages_path)
+      brands = menu_element("More", person_purchases_path(current_person))
+      #messages = menu_element("Messages", messages_path)
       #blog     = menu_element("Blog",     blog_path(current_person.blog))
       #photos   = menu_element("Photos",   photos_path)
       #contacts = menu_element("Contacts",
       #                        person_connections_path(current_person))
-      events   = menu_element("Events", events_path)
+      #events   = menu_element("Events", events_path)
       #links = [home, profile, contacts, messages, blog, people, forum]
-      links = [home, profile, messages, people, forum]
+      #links = [home, profile, messages, people, forum]
+      links = [purchases, brands, recommend, buy]
       # TODO: put this in once events are ready.
       # links.push(events)
       

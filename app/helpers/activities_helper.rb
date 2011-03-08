@@ -3,7 +3,14 @@ module ActivitiesHelper
   # Given an activity, return a message for the feed for the activity's class.
   def feed_message(activity, recent = false)
     person = activity.person
+#    if activity_type(activity)=="Product"
+#      %(#{person_link_with_image(person)} registered a new product)  
+#  end
+#  %(#{person_link_with_image(person)} registered a new #{activity_type(activity)})
     case activity_type(activity)
+    when "Purchase"
+      purchase = activity.item
+      %(#{person_link_with_image(person)} registered a new #{link_to(purchase.product.name, purchase_path(purchase))})
     when "BlogPost"
       post = activity.item
       blog = post.blog
@@ -114,6 +121,8 @@ module ActivitiesHelper
   def minifeed_message(activity)
     person = activity.person
     case activity_type(activity)
+    when "Purchase"
+        %(This is a new product)
     when "BlogPost"
       post = activity.item
       blog = post.blog
@@ -209,6 +218,8 @@ module ActivitiesHelper
             when "EventAttendee"
               # TODO: replace with a png icon
               "check.gif"
+            when "Purchase"
+              "check.gif"
             else
               raise "Invalid activity type #{activity_type(activity).inspect}"
             end
@@ -231,6 +242,15 @@ module ActivitiesHelper
     end
     link_to(text, blog_post_path(blog, post))
   end
+ 
+#  def purchase_link(text, purchase = nil)
+#    if purchase.nil?
+#      purchase = text
+#      text = purchase.title
+#    end
+#    link_to(text, purhcase_path(purchase))
+#  end
+#  
   
   def topic_link(text, topic = nil)
     if topic.nil?
